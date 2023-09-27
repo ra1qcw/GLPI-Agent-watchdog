@@ -8,34 +8,16 @@
 # Copyright:   (c) ra1qcw 2023
 # Licence:
 #-------------------------------------------------------------------------------
+import requests
+import os
+import winreg
+import psutil
 
 def main():
-    pass
-
-if __name__ == '__main__':
-    main()
-    import requests
-    import os
-    import winreg
-    import psutil
-
-
-    def getService(name):
-
-        service = None
-        try:
-            service = psutil.win_service_get(name)
-            service = service.as_dict()
-        except Exception as ex:
-            print(str(ex))
-        return service
-
     service = getService('GLPI-Agent')
-
     if (not service):
         print("Service not found. Exit.")
         os._exit(0)
-
     print(service['name'] + ' status: '+service['status'])
 
     access_registry = winreg.ConnectRegistry(None,winreg.HKEY_LOCAL_MACHINE)
@@ -99,4 +81,17 @@ if __name__ == '__main__':
 
     os.system('net stop GLPI-agent')
     os.system('net start GLPI-agent')
+
+def getService(name):
+
+        service = None
+        try:
+            service = psutil.win_service_get(name)
+            service = service.as_dict()
+        except Exception as ex:
+            print(str(ex))
+        return service
+
+if __name__ == '__main__':
+    main()
     
