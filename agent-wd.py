@@ -17,8 +17,7 @@ if __name__ == '__main__':
     import requests
     import os
     import winreg
-    import psutil
-
+    
     access_registry = winreg.ConnectRegistry(None,winreg.HKEY_LOCAL_MACHINE)
     #access_key = winreg.OpenKey(access_registry,r"SOFTWARE\Microsoft\Windows\CurrentVersion")
     try:
@@ -51,7 +50,7 @@ if __name__ == '__main__':
      resAgent = -1
     else:
      resAgent = response.status_code
-    print('Agent anwer: '+ 'OK' if resAgent==200 else 'Error')
+    print('Agent answer: '+ 'OK' if resAgent==200 else 'Error')
     if resAgent == 200:
      print('Exit.')
      os._exit(0)
@@ -63,7 +62,7 @@ if __name__ == '__main__':
      resAgent = -1
     else:
      resAgent = response.status_code
-    print('Second Agent anwer: '+'OK' if resAgent==200 else 'Error')
+    print('Second Agent answer: '+'OK' if resAgent==200 else 'Error')
     if resAgent == 200:
      print('OK. Exit.')
      os._exit(0)
@@ -74,7 +73,7 @@ if __name__ == '__main__':
      resSrv = -1
     else:
      resSrv = response.status_code
-    print('Server anwer: '+'OK' if resSrv==200 else 'Error')
+    print('Server answer: '+'OK' if resSrv==200 else 'Error')
     if resSrv != 200:
      os._exit(0)
 
