@@ -17,7 +17,27 @@ if __name__ == '__main__':
     import requests
     import os
     import winreg
-    
+    import psutil
+
+
+    def getService(name):
+
+        service = None
+        try:
+            service = psutil.win_service_get(name)
+            service = service.as_dict()
+        except Exception as ex:
+            print(str(ex))
+        return service
+
+    service = getService('GLPI-Agent')
+
+    if (not service):
+        print("Service not found. Exit.")
+        os._exit(0)
+
+    print(service['name'] + ' status: '+service['status'])
+
     access_registry = winreg.ConnectRegistry(None,winreg.HKEY_LOCAL_MACHINE)
     #access_key = winreg.OpenKey(access_registry,r"SOFTWARE\Microsoft\Windows\CurrentVersion")
     try:
@@ -37,7 +57,7 @@ if __name__ == '__main__':
     agentPort = winreg.QueryValueEx(access_key,"httpd-port")
     agentPort = agentPort[0]
     if (agentPort.strip()==''):
-     print("No agent port addres. Exit.");
+     print("No agent port. Exit.");
      os._exit(0)
     print("Agent port: "+agentPort)
 
@@ -50,7 +70,7 @@ if __name__ == '__main__':
      resAgent = -1
     else:
      resAgent = response.status_code
-    print('Agent answer: '+ 'OK' if resAgent==200 else 'Error')
+    print('Agent answer: '+ ('OK' if resAgent==200 else 'Error'))
     if resAgent == 200:
      print('Exit.')
      os._exit(0)
@@ -62,7 +82,7 @@ if __name__ == '__main__':
      resAgent = -1
     else:
      resAgent = response.status_code
-    print('Second Agent answer: '+'OK' if resAgent==200 else 'Error')
+    print('Second Agent answer: '+('OK' if resAgent==200 else 'Error'))
     if resAgent == 200:
      print('OK. Exit.')
      os._exit(0)
@@ -79,6 +99,4 @@ if __name__ == '__main__':
 
     os.system('net stop GLPI-agent')
     os.system('net start GLPI-agent')
-
-
-
+    
